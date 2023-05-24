@@ -50,7 +50,7 @@ pollutantmean <- function(directory, pollutant, id = 1:332) {
   values <- numeric()
   
   for (i in id) {
-    data <- read.csv(fileList[i])
+    data <- read.csv(file_list[i])
     values <- c(values, data[[pollutant]])
   }
   
