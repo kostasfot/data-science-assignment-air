@@ -36,6 +36,28 @@ pollutantmean <- function(directory, pollutant, id = 1:332) {
 	## NOTE: Do not round the result!
 }
 ```
+**Answer**
+```R
+# Writing the function
+pollutantmean <- function(directory, pollutant, id = 1:332) {
+  
+  # Storing all the csv files into a list
+  file_list <- list.files(path = directory,
+                         pattern = ".csv",
+                         full.names = TRUE)
+  
+  # Creating a variable to store our data into
+  values <- numeric()
+  
+  for (i in id) {
+    data <- read.csv(fileList[i])
+    values <- c(values, data[[pollutant]])
+  }
+  
+  # Calculating the means
+  mean(values, na.rm = TRUE)
+}
+```
 You can see some example output from this function below. The function that you write should be able to match this output. Please save your code to a file named pollutantmean.R. [Example code](https://d3c33hcgiwev3.cloudfront.net/_3b0da118473bfa0845efddcbe29cc336_pollutantmean-demo.html?Expires=1684972800&Signature=F1dC9705NdlZ9qlvRgDAppGkq~PwaeHgrQWVhPn9Y4tqZPeoispZo308pfBq0PFUYtsX6p2JFSGyoH~87n05c-mTOMXmoumpLgCDTF~~hq5y6Yxc0IPFLWEK94IdjpDDWJ62XjrRmAbeRbTcZuHVMB42qOTjatjYBd2S-ldETZE_&Key-Pair-Id=APKAJLTNE6QMUY6HBC5A)
 
 **Part 2**
@@ -58,6 +80,27 @@ complete <- function(directory, id = 1:332) {
 	## number of complete cases
 }
 ```
+**Answer**
+```R
+# Writing the function
+complete <- function(directory, id = 1:332) {
+  
+  # Creating a list of the csv files
+  file_list = list.files(path = directory, pattern = ".csv", full.names = TRUE)
+  
+  # Numeric variable where sum of the complete cases will be stored
+  nobs <- numeric()
+  
+  # Sum operation of the complete cases
+  for (i in id) {
+    data <- read.csv(file_list[i])
+    nobs <- c(nobs, sum(complete.cases(data)))
+  }
+  
+  # Creating a table form of our results
+  data.frame(id, nobs)
+}
+```
 You can see some example output from this function below. The function that you write should be able to match this output. Please save your code to a file named complete.R. To run the submit script for this part, make sure your working directory has the file complete.R in it. [Example code](https://d3c33hcgiwev3.cloudfront.net/_3b0da118473bfa0845efddcbe29cc336_complete-demo.html?Expires=1684972800&Signature=DbyLRyKO4ustcpzicI4nuQPG8OYLFTvvD4yowyI-bFPemV1zcCR7YIAeTcE0zqJDaaY-19as~dVj4sxzBksOK87YptcbefnIPZJkNKx1BnDER~RjZ4fpcKM-KLHJ3LtQArVHk-1fJCDoIQOt-AgJXq0-aPQGgWOGANCWl-IoQJs_&Key-Pair-Id=APKAJLTNE6QMUY6HBC5A)
 
 **Part 3**
@@ -75,6 +118,32 @@ corr <- function(directory, threshold = 0) {
 	
 	## Return a numeric vector of correlations
 	## NOTE: Do not round the result!
+}
+```
+**Answer**
+```R
+corr <- function(directory, threshold = 0) {
+  # Creating a list of the CSV files
+  file_list <- list.files(path = directory, pattern = ".csv", full.names = TRUE)
+  
+  # Numeric vector to store the correlations
+  correlations <- numeric()
+  
+  # Calculate correlations for monitors meeting the threshold requirement
+  for (i in seq_along(file_list)) {
+    data <- read.csv(file_list[i])
+    num_complete_cases <- sum(complete.cases(data))
+    
+    # Calculate correlation if threshold is met
+    if (num_complete_cases > threshold) {
+      sulfate <- data$sulfate[complete.cases(data)]
+      nitrate <- data$nitrate[complete.cases(data)]
+      correlation <- cor(sulfate, nitrate)
+      correlations <- c(correlations, correlation)
+    }
+  }
+  
+  return(correlations)
 }
 ```
 For this function you will need to use the 'cor' function in R which calculates the correlation between two vectors. Please read the help page for this function via '?cor' and make sure that you know how to use it.
